@@ -6,6 +6,7 @@ from selenium.webdriver.common.keys import Keys
 import os
 import time 
 from parsel import Selector
+from key import userName, passWord 
 options = webdriver.ChromeOptions()
 
 
@@ -17,14 +18,11 @@ college_name_error = open(
     "/mnt/9fd77f34-e78e-483a-9a58-74645782f0b5/Projects/TPO/college_name_error.csv", "w+")
 driver.get('https://www.linkedin.com')
 username = driver.find_element_by_id('session_key')
-username.send_keys('adhikramm@gmail.com')
+username.send_keys(userName)
 password = driver.find_element_by_id('session_password')
-password.send_keys('hotfat999')
+password.send_keys(passWord )
 log_in_button = driver.find_element_by_class_name('sign-in-form__submit-button')
 log_in_button.click()
-time.sleep(1)
-skip_button = driver.find_element_by_class_name('secondary-action')
-skip_button.click()
 for d in data.readlines():  
     
     dt = list(d.split(","))
@@ -37,14 +35,14 @@ for d in data.readlines():
         # print(dt)
         time.sleep(5)
         driver.get(dt[-1])
+        driver.execute_script("window.scrollTo(0, window.scrollY + 200)")
         time.sleep(5)
         sel = Selector(text=driver.page_source) 
         time.sleep(5)
-        college = sel.xpath('//*[starts-with(@class,"text-align-left ml2 t-14 t-black t-bold full-width lt-line-clamp lt-line-clamp--multi-line ember-view")]/text()').extract_first()
-        if college:
-            college = college.strip()
+        college = sel.xpath('//*[starts-with(@class,"pv-entity__school-name t-16 t-black t-bold")]/text()').extract_first()
+        print(college)
         if college != 'Cooch Behar Government Engineering College':
-            print(name,college)
+            print(college)
             college_name_error.write(','.join(dt))
     except:
         print(dt)
