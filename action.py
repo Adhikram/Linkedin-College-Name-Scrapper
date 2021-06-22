@@ -36,6 +36,7 @@ for d in data.readlines():
         driver.get(dt[-1])
         time.sleep(random.randint(1,5))
         driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+        time.sleep(3)
         time.sleep(random.randint(1,5))
         html_soup = BeautifulSoup(driver.page_source,'html.parser')
         # name = html_soup.find("h3",{"class":"pv-entity__school-name t-16 t-black t-bold"}).text
